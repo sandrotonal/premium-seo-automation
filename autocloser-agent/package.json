@@ -1,0 +1,60 @@
+{
+  "name": "autocloser-agent",
+  "version": "1.0.0",
+  "description": "AI Sales-Closing Chatbot Platform - Convert leads into paying customers through automated conversations",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:admin\" \"npm run dev:agents\"",
+    "dev:api": "cd services/api-gateway && npm run start:dev",
+    "dev:admin": "cd apps/admin-react && npm run dev",
+    "dev:agents": "cd services/agents && npm run start",
+    "build": "npm run build:services && npm run build:apps",
+    "build:services": "cd services/api-gateway && npm run build && cd ../agents && npm run build && cd ../jobs && npm run build",
+    "build:apps": "cd apps/admin-react && npm run build && cd ../web-landing && npm run build",
+    "test": "npm run test:services && npm run test:apps",
+    "test:services": "cd services/api-gateway && npm run test && cd ../agents && npm run test && cd ../jobs && npm run test",
+    "test:apps": "cd apps/admin-react && npm run test && cd ../web-landing && npm run test",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "deploy:staging": "cd infra && ./deploy.sh staging",
+    "deploy:prod": "cd infra && ./deploy.sh prod",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/autocloser-agent.git"
+  },
+  "keywords": [
+    "chatbot",
+    "ai",
+    "sales",
+    "whatsapp",
+    "saas",
+    "nodejs",
+    "flutter",
+    "react"
+  ],
+  "author": "MiniMax Agent",
+  "license": "MIT"
+}
