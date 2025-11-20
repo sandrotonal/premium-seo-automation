@@ -1,0 +1,184 @@
+You are an expert full-stack team (or automated agent) with production experience building, deploying, and publishing mobile+backend SaaS + messaging integrations. Your mission: build, test, secure, and fully deploy **AutoCloser Agent** — an AI Sales-Closing Chatbot platform that integrates with WhatsApp (primary), Webchat and optionally Telegram/Instagram DMs, provides agent-driven automated sales/checkout flows, subscription billing, merchant dashboard, and mobile/public web UI. Deliver a production repo + infra + CI/CD that can be released to users immediately.
+
+SUMMARY REQUIREMENTS
+1) Product summary:
+   - Purpose: convert casual leads into paying customers by automated conversation flows, quote generation, one-click payment links, cart recovery, and handover to human agents when needed.
+   - Core users: SMB sellers (KOBİ), e-commerce stores, local shops; Admins (platform owners); End customers (buyers contacting via WhatsApp/web).
+   - Monetization: SaaS monthly plans + message-based pricing + revenue share on payments processed through the platform.
+
+2) Must-have integrations (priority):
+   - WhatsApp Business Cloud API (via Twilio or direct Meta Cloud webhook + templates). Provide code for template messaging, session messaging, webhooks, and message templates registration flow. 1
+   - Secondary channels: Webchat widget (socket + embeddable JS), Telegram bot (optional).
+   - Payments (Turkey primary): iyzico Marketplace / Payment Solutions for subscription & checkout (+ fallback PayU). Provide secure server-side integration (create checkout, handle notifications/webhooks, tokenization). 2
+   - Optional: Card on file + Apple Pay / Google Pay via payment provider support and web checkout SDK.
+
+3) Target platforms:
+   - Mobile: Flutter app (Android + iOS). Pixel-perfect UI/UX with ready-to-use components (login, chat, transactions, dashboard).
+   - Web: React + Next.js public landing + merchant dashboard (React admin).
+   - Backend: Node.js + TypeScript (NestJS recommended) with OpenAPI / Swagger.
+   - DB: PostgreSQL (relational), Redis (pub/sub, sessions, rate limit), S3 compatible storage.
+   - Realtime: Socket.IO (or WebSockets) for agent → human handoff, live typing indicators.
+   - AI: OpenAI or compatible LLM provider adapter (abstracted) for conversation agent; show how to swap providers securely.
+
+TECHNICAL DELIVERABLES (repo + files)
+A) Monorepo structure (example):
+   /apps
+     /mobile-flutter
+     /web-landing
+     /admin-react
+   /services
+     /api-gateway (NestJS)
+     /agents (worker processes, Node.js)
+     /jobs (cron + billing)
+   /infra
+     /terraform (AWS or chosen cloud)
+     /k8s (optional manifests)
+   /ci (github actions, fastlane)
+   /docs (README, runbooks, API spec)
+
+B) Required code & artifacts:
+   1. Full backend with:
+      - Auth (JWT + refresh), role based access (seller, admin).
+      - OAuth / phone OTP login (Twilio SMS as fallback).
+      - WhatsApp integration: sendMessage, sendTemplate, receive webhook, verify signature, message mapping to conversations.
+      - Conversation engine: orchestrator that manages agent state, fallbacks, and human handoff.
+      - Payment flows: createCheckout (iyzico), webhook handlers, subscription billing, invoice generation, refunds.
+      - Admin endpoints: merchant onboarding, subscription management, credits, dispute handling.
+      - OpenAPI spec (YAML) for payment + order + webhook endpoints.
+   2. Agent workers:
+      - LLM wrapper with prompt templates for lead qualification, objection handling, price negotiation, upsell, discount code generation, and closing script.
+      - Fine-grained conversation policies (confidence thresholds, handoff triggers).
+   3. Mobile (Flutter):
+      - Beautiful pixel-perfect UI (login flow, chat screen, quick replies, checkout widget, merchant store view).
+      - In-chat mini-checkout using hosted iyzico form or secure webview fallback.
+      - Push notifications (Firebase Cloud Messaging).
+   4. Web admin (React):
+      - Dashboard analytics (MRR, conversions, messages), conversation review, manual takeover, message templates editor, message logs.
+   5. DevOps:
+      - Dockerfiles for all services.
+      - Terraform (or CloudFormation) scripts to provision VPC, RDS (Postgres), EKS/Fargate or App Runner, S3, Redis (ElastiCache), ALB, ACM (TLS), CloudWatch / Grafana.
+      - GitHub Actions workflows: build/test, containerize, push to registry, deploy to staging, run smoke tests, deploy to production on tag.
+      - Fastlane for iOS build & Play Console upload; Play Console internal testing + App Store TestFlight provisioning.
+   6. Monitoring & security:
+      - Sentry integration (errors), Prometheus + Grafana (metrics), centralized structured logging (ELK or managed CloudWatch).
+      - Rate limits & abuse protection, message audit logs, data retention & export.
+   7. Legal & compliance:
+      - Privacy policy (mentioning AI usage and third-party data sharing), KVKK checklist points for Turkey, PCI-DSS note (do not store raw card data).
+      - Consent flows for sharing user info with AI providers and WhatsApp templates opt-in.
+   8. Tests:
+      - Unit tests, integration tests for payment webhooks (simulate iyzico sandbox), e2e tests for chat flows (Playwright for web, flutter integration tests), postman collection or OpenAPI test harness.
+
+USER FLOWS (acceptance criteria)
+1) Merchant onboarding:
+   - Merchant registers, verifies phone/email, fills KYC (file upload).
+   - Merchant links WhatsApp Business (via Twilio/Meta) or installs web widget.
+   - Merchant configures products/services, pricing, working hours, closing policy.
+   - Acceptance: Merchant can send test message, receive agent reply, and create a test checkout.
+
+2) Customer lead → sale:
+   - Customer messages via WhatsApp.
+   - System replies within session: greet → qualify lead (three questions) → present offer.
+   - Customer accepts → AutoCloser generates checkout link and payment receipt after success.
+   - If payment success → conversation auto-sends confirmation, merchant receives order in admin.
+   - Acceptance: conversion tracked in analytics, payment captured by iyzico, invoice generated.
+
+3) Handovers:
+   - Agent decides to handoff when confidence < threshold or customer requests agent.
+   - Human sees conversation in admin and takes over seamlessly.
+   - Acceptance: no message loss, conversation state preserved.
+
+PRODUCTION-GRADE TECHNICAL SPECIFICS (must be implemented)
+- WhatsApp: use template for outbound proactive messages; manage templates lifecycle and business verification. Provide sample template JSON + registration guide. Verify webhook signatures. 3
+- Payment: integrate iyzico marketplace for checkout + split payouts (merchant vs platform). Implement secure server webhook handler and reconcile daily. Provide sandbox configuration and reconciliation scripts. 4
+- AI agent prompts: include layered prompt architecture:
+   - System prompt: brand voice, closing goals, allowed discounts, legal constraints.
+   - Task prompt: extract intent, classify lead quality, propose 1–3 offers with prices and urgency script.
+   - Response filter: profanity, PII redaction, disallowed content detector.
+- Data flow & privacy: redact personal data before sending to LLM if merchant hasn’t consented; store only necessary conversation metadata.
+
+MESSAGE TEMPLATES & PROMPTS (deliverables)
+- Provide 10 ready-to-use WhatsApp template messages (confirmation, payment link, follow-up, cart recovery, handoff notice) in Turkish & English.
+- Provide 20 agent prompt templates for negotiation, objection handling, discount offering, urgency creation, cross-sell.
+
+CI/CD & RELEASE (concrete)
+- GitHub Actions:
+  - ci.yml → runs tests, lint, unit tests, build containers.
+  - deploy_staging.yml → deploy to staging cluster on merge to main.
+  - release.yml → on tag push, build artifacts, Fastlane publish to TestFlight & Play Internal.
+- Fastlane:
+  - android: build, sign, upload to Play Console (internal track).
+  - ios: build archive, notarize, upload to TestFlight.
+- Provide Fastlane configuration with environment secrets stored in GitHub Actions Secrets.
+
+APP STORE & PLAY STORE COMPLIANCE NOTES
+- Ensure in-app purchases vs external payments adherence per latest platform rules; provide alternate flows for subscription management via web if required. (Platform rules change frequently: check App Review and Play policies before final submit). 5
+- Provide App Privacy manifest: disclose AI usage, third-party data sharing, and WhatsApp integration.
+- Prepare required metadata: screenshots (mobile chat + checkout), promotional text, support URL, privacy policy URL, contact email.
+
+SECURITY / HARDENING
+- Do not store PANs (card numbers). Use iyzico tokens and follow PCI-DSS guidance.
+- Enforce HTTPS, HSTS, CSP for web.
+- Secrets management: use AWS Secrets Manager / HashiCorp Vault.
+- RBAC for admin UI and audit logging.
+
+MONITORING & ALERTS
+- Implement Sentry alerts for high error rate, payment failures, webhook mismatches.
+- Create Grafana dashboards: messages/sec, conversion rate, avg response time, MRR.
+- Proactive alerts: when conversion rate drops > 20% week-over-week.
+
+DEPLOY & RUN (commands & infra)
+- Provide Terraform scripts to provision:
+  - RDS (Postgres) read replica, ElastiCache (Redis), ECS/Fargate or EKS cluster, ALB, ACM certs, S3 bucket.
+- Provide `./infra/deploy.sh staging` and `./infra/deploy.sh prod` with recommended AWS CLI calls.
+- Provide Docker Compose for local dev.
+
+SAMPLE ENV TEMPLATE (.env.example)
+- DATABASE_URL=postgres://user:pass@host:5432/db
+- REDIS_URL=redis://:pass@host:6379/0
+- IYZIPAY_API_KEY=...
+- IYZIPAY_SECRET=...
+- WHATSAPP_TWILIO_ACCOUNT_SID=...
+- WHATSAPP_TWILIO_AUTH_TOKEN=...
+- META_WHATSAPP_VERIFY_TOKEN=...
+- OPENAI_API_KEY=...
+- JWT_SECRET=...
+- SENTRY_DSN=...
+- FCM_SERVER_KEY=...
+
+TESTING & QA
+- Provide Postman collection or OpenAPI tests for:
+  - Create conversation → agent replies → create checkout → simulate iyzico webhook (success/failure).
+  - WhatsApp webhook signature verification test harness.
+  - Load test: simulate 1k concurrent incoming messages and measure queue/backpressure handling.
+
+DOCUMENTATION & LAUNCH KIT
+- README: setup steps for local dev, staging, and production.
+- Onboarding checklist for merchants (WhatsApp business account / Twilio onboarding).
+- App Store / Play Store release checklist (screenshots, descriptions, test accounts).
+- Marketing assets: store screenshots, short/long descriptions, 5 ASO keywords TR & EN, 3 ad copy variants.
+
+MEASUREMENTS & KPI
+- Provide default KPI dashboard: MRR, conversion rate (lead→paid), average ticket, messages per conversion, avg response time, chargebacks.
+
+LEGAL / COMPLIANCE TEXTS (starter)
+- Privacy policy template highlighting: data collected, retention, AI use, third-party providers (iyzico, Twilio/Meta, OpenAI), user rights.
+- Terms of service & refund policy with sample SLA for merchants.
+
+DELIVERABLES (on completion)
+1. Fully working monorepo pushed to GitHub with tags v1.0.0 (staging) and v1.0.1 (prod).
+2. Staging and production environments up and reachable.
+3. Mobile builds uploaded to TestFlight and Play internal testing.
+4. Admin panel with two seeded merchants and demo conversations.
+5. Full README + runbook for 1st 30 days of operation (SLA, escalation).
+6. Postman collection or OpenAPI with sample requests.
+7. Documentation: how to register WhatsApp templates and iyzico sandbox keys.
+
+TIMELINE (automated agent: aim to produce deployable infra & staging within one run)
+- If used by an automated CI: produce all docker images, terraform plan, and run apply with provided cloud credentials.
+- Provide explicit fallback instructions if automated cloud creds not allowed (manual terraform apply steps).
+
+IMPORTANT NOTES / RISKS
+- Business verification needed for WhatsApp & iyzico production accounts (expect manual review). Plan onboarding sequence accordingly. 6
+- Platform payment rules (App Store / Play) change; provide web-links in docs and a migration plan to use web checkouts if needed. 7
+
+END OF PROMPT
