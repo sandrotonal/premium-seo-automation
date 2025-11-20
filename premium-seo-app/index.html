@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Assistant AI - Premium SEO Automation Platform</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+        <!-- Screen 1: Dashboard Home -->
+        <div id="dashboard-screen" class="screen active">
+            <!-- Hero Card with Waveform Animation -->
+            <div class="hero-card glassmorphic">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">Hoş geldiniz, SEO Uzmanı!</h1>
+                        <p class="hero-subtitle">AI destekli SEO otomasyonu ile web sitenizi zirveye taşıyın</p>
+                    </div>
+                    <div class="waveform-container">
+                        <svg class="waveform-svg" width="200" height="60" viewBox="0 0 200 60">
+                            <defs>
+                                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#22D3EE;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path class="wave-path" d="" stroke="url(#waveGradient)" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="action-btn glassmorphic" data-action="generate-keywords">
+                        <i data-lucide="search"></i>
+                        <span>Anahtar Kelime Üret</span>
+                    </div>
+                    <div class="action-btn glassmorphic" data-action="optimize-page">
+                        <i data-lucide="settings"></i>
+                        <span>Sayfa Optimize Et</span>
+                    </div>
+                    <div class="action-btn glassmorphic" data-action="create-backlinks">
+                        <i data-lucide="link"></i>
+                        <span>Backlink Oluştur</span>
+                    </div>
+                    <div class="action-btn glassmorphic" data-action="analyze-competitors">
+                        <i data-lucide="users"></i>
+                        <span>Rakip Analizi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Cards -->
+            <div class="analytics-grid">
+                <div class="analytics-card glassmorphic">
+                    <div class="seo-score">
+                        <div class="score-circle">
+                            <div class="score-value">87</div>
+                            <div class="score-label">SEO Skoru</div>
+                        </div>
+                    </div>
+                    <div class="card-title">SEO Sağlık Skoru</div>
+                    <div class="score-trend up">↗ +3 puan</div>
+                </div>
+
+                <div class="analytics-card glassmorphic">
+                    <canvas id="trafficChart" width="200" height="80"></canvas>
+                    <div class="card-title">Trafik Büyüme</div>
+                    <div class="traffic-info">Son 30 günde <strong>+2,847</strong> ziyaretçi</div>
+                </div>
+
+                <div class="analytics-card glassmorphic">
+                    <div class="indexing-status">
+                        <div class="status-item">
+                            <div class="status-indicator active"></div>
+                            <span>Google: Aktif</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator active"></div>
+                            <span>Bing: Aktif</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-indicator warning"></div>
+                            <span>Yandex: Beklemede</span>
+                        </div>
+                    </div>
+                    <div class="card-title">İndeksleme Durumu</div>
+                </div>
+            </div>
+
+            <!-- AI Activity Feed -->
+            <div class="activity-feed glassmorphic">
+                <h2 class="section-title">AI Aktivite Özeti</h2>
+                <div class="feed-item">
+                    <div class="feed-icon ai">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div class="feed-content">
+                        <p>AI 32 yeni anahtar kelime fırsatı ekledi</p>
+                        <span class="feed-time">2 saat önce</span>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-icon warning">
+                        <i data-lucide="trending-down"></i>
+                    </div>
+                    <div class="feed-content">
+                        <p>Rakip sıralama değişikliği tespit edildi</p>
+                        <span class="feed-time">4 saat önce</span>
+                    </div>
+                </div>
+                <div class="feed-item">
+                    <div class="feed-icon success">
+                        <i data-lucide="check-circle"></i>
+                    </div>
+                    <div class="feed-content">
+                        <p>15 teknik SEO sorunu otomatik olarak çözüldü</p>
+                        <span class="feed-time">6 saat önce</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Projects Page -->
+        <div id="projects-screen" class="screen">
+            <div class="screen-header">
+                <h1 class="page-title">Projelerim</h1>
+                <button class="new-project-btn primary-btn">
+                    <i data-lucide="plus"></i>
+                    <span>Yeni Proje</span>
+                </button>
+            </div>
+
+            <!-- Project Filters -->
+            <div class="project-filters">
+                <div class="filter-chip active" data-filter="all">Tümü</div>
+                <div class="filter-chip" data-filter="high-priority">Yüksek Öncelik</div>
+                <div class="filter-chip" data-filter="low-ranking">Düşük Sıralama</div>
+                <div class="filter-chip" data-filter="needs-fixing">Düzeltme Gerekli</div>
+            </div>
+
+            <!-- Project Grid -->
+            <div class="projects-grid">
+                <div class="project-card glassmorphic" data-project="tech-blog">
+                    <div class="project-header">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%234F46E5' rx='6'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='white' font-size='14' font-weight='600'%3ET%3C/text%3E%3C/svg%3E" alt="Tech Blog" class="favicon">
+                        <div class="project-info">
+                            <h3>TechBlog Pro</h3>
+                            <span class="domain">techblog.com</span>
+                        </div>
+                        <div class="project-menu">
+                            <i data-lucide="more-vertical"></i>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">SEO Skoru</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value warning">3</div>
+                            <div class="stat-label">Sorun</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value success">127</div>
+                            <div class="stat-label">Anahtar Kelime</div>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="action-button">Analiz Et</button>
+                        <button class="action-button secondary">Düzelt</button>
+                    </div>
+                </div>
+
+                <div class="project-card glassmorphic" data-project="ecommerce">
+                    <div class="project-header">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2322D3EE' rx='6'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='white' font-size='14' font-weight='600'%3EE%3C/text%3E%3C/svg%3E" alt="E-commerce" class="favicon">
+                        <div class="project-info">
+                            <h3>ShopNow</h3>
+                            <span class="domain">shopnow.com</span>
+                        </div>
+                        <div class="project-menu">
+                            <i data-lucide="more-vertical"></i>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">94</div>
+                            <div class="stat-label">SEO Skoru</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value success">0</div>
+                            <div class="stat-label">Sorun</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">284</div>
+                            <div class="stat-label">Anahtar Kelime</div>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="action-button">Analiz Et</button>
+                        <button class="action-button secondary">Düzelt</button>
+                    </div>
+                </div>
+
+                <div class="project-card glassmorphic" data-project="portfolio">
+                    <div class="project-header">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%237C3AED' rx='6'/%3E%3Ctext x='16' y='20' text-anchor='middle' fill='white' font-size='14' font-weight='600'%3EP%3C/text%3E%3C/svg%3E" alt="Portfolio" class="favicon">
+                        <div class="project-info">
+                            <h3>Designer Portfolio</h3>
+                            <span class="domain">muratdesigner.com</span>
+                        </div>
+                        <div class="project-menu">
+                            <i data-lucide="more-vertical"></i>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div class="stat-value error">67</div>
+                            <div class="stat-label">SEO Skoru</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value error">8</div>
+                            <div class="stat-label">Sorun</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">45</div>
+                            <div class="stat-label">Anahtar Kelime</div>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <button class="action-button">Analiz Et</button>
+                        <button class="action-button secondary">Düzelt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: AI SEO Chat -->
+        <div id="chat-screen" class="screen">
+            <div class="chat-header glassmorphic">
+                <div class="chat-title">
+                    <i data-lucide="bot"></i>
+                    <span>AI SEO Asistanı</span>
+                </div>
+                <button class="ai-tools-btn" id="aiToolsToggle">
+                    <i data-lucide="wrench"></i>
+                    <span>AI Araçları</span>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    <div class="message-avatar">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Merhaba! Ben AI SEO asistanınızım. Web sitenizi optimize etmek, anahtar kelime araştırması yapmak veya SEO raporunuzu incelemek için yardımcı olabilirim. Ne yapmamı istersiniz?</p>
+                        <span class="message-time">14:32</span>
+                    </div>
+                </div>
+
+                <div class="message user-message">
+                    <div class="message-content">
+                        <p>Anahtar kelime araştırması yapar mısın? Türkiye için teknoloji sektörü</p>
+                        <span class="message-time">14:35</span>
+                    </div>
+                    <div class="message-avatar">
+                        <i data-lucide="user"></i>
+                    </div>
+                </div>
+
+                <div class="message ai-message">
+                    <div class="message-avatar">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="keyword-results">
+                            <h4>Türkiye Teknoloji Sektörü - Anahtar Kelimeler:</h4>
+                            <div class="keyword-grid">
+                                <div class="keyword-item">
+                                    <span class="keyword">teknoloji trendi</span>
+                                    <span class="difficulty easy">Kolay</span>
+                                    <span class="volume">1.2K arama/ay</span>
+                                </div>
+                                <div class="keyword-item">
+                                    <span class="keyword">yazılım geliştirici</span>
+                                    <span class="difficulty medium">Orta</span>
+                                    <span class="volume">890 arama/ay</span>
+                                </div>
+                                <div class="keyword-item">
+                                    <span class="keyword">artificial intelligence</span>
+                                    <span class="difficulty hard">Zor</span>
+                                    <span class="volume">2.1K arama/ay</span>
+                                </div>
+                            </div>
+                            <p class="ai-insight">Bu anahtar kelimeleri içeren içerikler oluşturarak organik trafiğinizi %40 artırabilirsiniz.</p>
+                        </div>
+                        <span class="message-time">14:36</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="chat-input-container">
+                    <button class="input-action-btn" id="voiceInput">
+                        <i data-lucide="mic"></i>
+                    </button>
+                    <input type="text" placeholder="SEO sorunuzu yazın..." class="chat-input" id="chatInput">
+                    <button class="input-action-btn" id="uploadUrl">
+                        <i data-lucide="link"></i>
+                    </button>
+                    <button class="send-btn" id="sendMessage">
+                        <i data-lucide="send"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Tools Sidebar -->
+            <div class="ai-tools-sidebar" id="aiToolsSidebar">
+                <div class="tools-header">
+                    <h3>AI Araçları</h3>
+                    <button class="close-tools-btn" id="closeToolsBtn">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="tools-list">
+                    <div class="tool-item" data-tool="keyword-generator">
+                        <i data-lucide="search"></i>
+                        <div class="tool-info">
+                            <h4>Anahtar Kelime Üretici</h4>
+                            <p>LSA algoritması ile yeni kelimeler bul</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" data-tool="meta-writer">
+                        <i data-lucide="edit"></i>
+                        <div class="tool-info">
+                            <h4>Meta Açıklama Yazarı</h4>
+                            <p>SEO optimizeli açıklamalar oluştur</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" data-tool="technical-analyzer">
+                        <i data-lucide="settings"></i>
+                        <div class="tool-info">
+                            <h4>Teknik Fix Analizör</h4>
+                            <p>Hızlı teknik SEO sorunlarını tespit et</p>
+                        </div>
+                    </div>
+                    <div class="tool-item" data-tool="competitor-summary">
+                        <i data-lucide="users"></i>
+                        <div class="tool-info">
+                            <h4>Rakip AI Özeti</h4>
+                            <p>Rakiplerin SEO stratejilerini analiz et</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 4: Automations -->
+        <div id="automations-screen" class="screen">
+            <div class="screen-header">
+                <h1 class="page-title">Otomasyonlar</h1>
+                <button class="new-automation-btn primary-btn">
+                    <i data-lucide="plus"></i>
+                    <span>Yeni Otomasyon</span>
+                </button>
+            </div>
+
+            <div class="automations-grid">
+                <div class="automation-card glassmorphic">
+                    <div class="automation-header">
+                        <div class="automation-icon">
+                            <i data-lucide="search"></i>
+                        </div>
+                        <div class="automation-info">
+                            <h3>Günlük Anahtar Kelime Taraması</h3>
+                            <p>Her sabah yeni fırsatları keşfet</p>
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="keywordScan" checked>
+                            <label for="keywordScan" class="switch-label"></label>
+                        </div>
+                    </div>
+                    <div class="automation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Son Çalıştırma:</span>
+                            <span class="detail-value">Bugün 06:00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Sonraki:</span>
+                            <span class="detail-value">Yarın 06:00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durum:</span>
+                            <span class="detail-value success">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-card glassmorphic">
+                    <div class="automation-header">
+                        <div class="automation-icon">
+                            <i data-lucide="link"></i>
+                        </div>
+                        <div class="automation-info">
+                            <h3>Broken Link Monitor</h3>
+                            <p>Kırık linkleri otomatik tespit et</p>
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="linkMonitor" checked>
+                            <label for="linkMonitor" class="switch-label"></label>
+                        </div>
+                    </div>
+                    <div class="automation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Son Çalıştırma:</span>
+                            <span class="detail-value">2 saat önce</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Sonraki:</span>
+                            <span class="detail-value">8 saat sonra</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durum:</span>
+                            <span class="detail-value success">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-card glassmorphic">
+                    <div class="automation-header">
+                        <div class="automation-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="automation-info">
+                            <h3>Sıralama Takibi</h3>
+                            <p>Anahtar kelime pozisyonlarını izle</p>
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="rankTracking">
+                            <label for="rankTracking" class="switch-label"></label>
+                        </div>
+                    </div>
+                    <div class="automation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Son Çalıştırma:</span>
+                            <span class="detail-value">Never</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Sonraki:</span>
+                            <span class="detail-value">Configure first</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durum:</span>
+                            <span class="detail-value warning">Devre Dışı</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-card glassmorphic">
+                    <div class="automation-header">
+                        <div class="automation-icon">
+                            <i data-lucide="eye"></i>
+                        </div>
+                        <div class="automation-info">
+                            <h3>Rakip Gözetim</h3>
+                            <p>Rakiplerin stratejilerini takip et</p>
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="competitorWatch" checked>
+                            <label for="competitorWatch" class="switch-label"></label>
+                        </div>
+                    </div>
+                    <div class="automation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Son Çalıştırma:</span>
+                            <span class="detail-value">1 gün önce</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Sonraki:</span>
+                            <span class="detail-value">6 gün sonra</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Durum:</span>
+                            <span class="detail-value success">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Builder -->
+            <div class="workflow-builder glassmorphic">
+                <h3 class="section-title">Otomasyon İş Akışı</h3>
+                <div class="workflow-canvas">
+                    <div class="workflow-node" data-node="trigger">
+                        <div class="node-icon">
+                            <i data-lucide="play"></i>
+                        </div>
+                        <span class="node-label">Trigger</span>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-node" data-node="collect">
+                        <div class="node-icon">
+                            <i data-lucide="search"></i>
+                        </div>
+                        <span class="node-label">Veri Toplama</span>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-node" data-node="analyze">
+                        <div class="node-icon">
+                            <i data-lucide="brain"></i>
+                        </div>
+                        <span class="node-label">AI Analiz</span>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-node" data-node="notify">
+                        <div class="node-icon">
+                            <i data-lucide="bell"></i>
+                        </div>
+                        <span class="node-label">Bildirim</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 5: SEO Report Viewer -->
+        <div id="report-screen" class="screen">
+            <div class="screen-header">
+                <h1 class="page-title">SEO Raporu</h1>
+                <div class="report-actions">
+                    <button class="action-btn secondary">
+                        <i data-lucide="share"></i>
+                        <span>Paylaş</span>
+                    </button>
+                    <button class="action-btn secondary">
+                        <i data-lucide="copy"></i>
+                        <span>Kopyala</span>
+                    </button>
+                    <button class="action-btn primary">
+                        <i data-lucide="download"></i>
+                        <span>PDF İndir</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="report-container">
+                <!-- Report Header -->
+                <div class="report-header glassmorphic">
+                    <div class="report-title">
+                        <h2>SEO Analiz Raporu</h2>
+                        <p>TechBlog Pro - 20 Kasım 2025</p>
+                    </div>
+                    <div class="report-summary">
+                        <div class="summary-item">
+                            <div class="summary-score success">89</div>
+                            <span>Genel SEO Skoru</span>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-score warning">67</div>
+                            <span>Teknik SEO</span>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-score success">92</div>
+                            <span>İçerik Kalitesi</span>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-score success">78</div>
+                            <span>Backlink Profili</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card glassmorphic">
+                        <h3 class="chart-title">Sıralama Zaman Çizelgesi</h3>
+                        <canvas id="rankingChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="chart-card glassmorphic">
+                        <h3 class="chart-title">Anahtar Kelime Zorluk Haritası</h3>
+                        <canvas id="keywordChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Report Sections -->
+                <div class="report-sections">
+                    <div class="report-section glassmorphic">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i data-lucide="alert-triangle"></i>
+                                Teknik Sorunlar
+                            </h3>
+                            <span class="issue-count error">3 kritik sorun</span>
+                        </div>
+                        <div class="issues-list">
+                            <div class="issue-item">
+                                <div class="issue-severity critical"></div>
+                                <div class="issue-content">
+                                    <h4>Meta etiket eksik</h4>
+                                    <p>15 sayfada meta description bulunmuyor</p>
+                                </div>
+                                <button class="issue-action">Düzelt</button>
+                            </div>
+                            <div class="issue-item">
+                                <div class="issue-severity warning"></div>
+                                <div class="issue-content">
+                                    <h4>Sayfa hızı yavaş</h4>
+                                    <p>8 sayfa 3 saniyeden uzsağ yükleniyor</p>
+                                </div>
+                                <button class="issue-action">Düzelt</button>
+                            </div>
+                            <div class="issue-item">
+                                <div class="issue-severity info"></div>
+                                <div class="issue-content">
+                                    <h4>Alt etiket eksik</h4>
+                                    <p>23 görselde alt attribute bulunmuyor</p>
+                                </div>
+                                <button class="issue-action">Düzelt</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="report-section glassmorphic">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i data-lucide="edit"></i>
+                                On-Page SEO
+                            </h3>
+                            <span class="score success">92/100</span>
+                        </div>
+                        <div class="onpage-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Title Tag Optimizasyonu</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill success" style="width: 95%"></div>
+                                </div>
+                                <span class="metric-score">95%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Header Yapısı</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill success" style="width: 88%"></div>
+                                </div>
+                                <span class="metric-score">88%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">İçerik Uzunluğu</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill warning" style="width: 76%"></div>
+                                </div>
+                                <span class="metric-score">76%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="report-section glassmorphic">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i data-lucide="link"></i>
+                                Backlink Analizi
+                            </h3>
+                            <span class="score success">78/100</span>
+                        </div>
+                        <div class="backlink-stats">
+                            <div class="stat-row">
+                                <span>Toplam Backlink:</span>
+                                <strong>2,847</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span>Referans Domain:</span>
+                                <strong>156</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span>Toxic Link:</span>
+                                <strong class="warning">12</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span>Domain Authority:</span>
+                                <strong class="success">45</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="report-section glassmorphic">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <i data-lucide="target"></i>
+                                Fırsatlar
+                            </h3>
+                            <span class="opportunity-count">8 fırsat</span>
+                        </div>
+                        <div class="opportunities-list">
+                            <div class="opportunity-item">
+                                <div class="opportunity-priority high"></div>
+                                <div class="opportunity-content">
+                                    <h4>Long-tail anahtar kelimeler</h4>
+                                    <p>42 kolay kelime için içerik oluştur</p>
+                                    <div class="opportunity-metrics">
+                                        <span class="difficulty easy">Kolay</span>
+                                        <span class="potential">+2.5K ziyaret/ay</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="opportunity-item">
+                                <div class="opportunity-priority medium"></div>
+                                <div class="opportunity-content">
+                                    <h4>Teknik SEO iyileştirmeleri</h4>
+                                    <p>Core Web Vitals skorlarını artır</p>
+                                    <div class="opportunity-metrics">
+                                        <span class="difficulty medium">Orta</span>
+                                        <span class="potential">+15% trafik</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6: Profile & Settings -->
+        <div id="profile-screen" class="screen">
+            <div class="screen-header">
+                <h1 class="page-title">Profil & Ayarlar</h1>
+            </div>
+
+            <div class="profile-sections">
+                <!-- User Profile Card -->
+                <div class="profile-card glassmorphic">
+                    <div class="profile-avatar">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Murat Demir</h3>
+                        <p>murat.demir@email.com</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value">12</span>
+                                <span class="stat-label">Proje</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Pro</span>
+                                <span class="stat-label">Plan</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="edit-profile-btn">
+                        <i data-lucide="edit"></i>
+                    </button>
+                </div>
+
+                <!-- Subscription Card -->
+                <div class="settings-section glassmorphic">
+                    <h3 class="section-title">
+                        <i data-lucide="credit-card"></i>
+                        Abonelik
+                    </h3>
+                    <div class="subscription-info">
+                        <div class="plan-info">
+                            <div class="plan-name">Pro Plan</div>
+                            <div class="plan-price">₺299/ay</div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="feature-item">
+                                <i data-lucide="check"></i>
+                                <span>Sınırsız proje</span>
+                            </div>
+                            <div class="feature-item">
+                                <i data-lucide="check"></i>
+                                <span>AI destekli analiz</span>
+                            </div>
+                            <div class="feature-item">
+                                <i data-lucide="check"></i>
+                                <span>Otomatik raporlama</span>
+                            </div>
+                        </div>
+                        <button class="upgrade-btn primary-btn">
+                            <i data-lucide="arrow-up"></i>
+                            <span>Planı Yükselt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- API Keys Card -->
+                <div class="settings-section glassmorphic">
+                    <h3 class="section-title">
+                        <i data-lucide="key"></i>
+                        API Anahtarları
+                    </h3>
+                    <div class="api-keys">
+                        <div class="api-key-item">
+                            <div class="key-info">
+                                <h4>Google Analytics</h4>
+                                <span class="key-status connected">Bağlı</span>
+                            </div>
+                            <button class="key-action">
+                                <i data-lucide="edit"></i>
+                            </button>
+                        </div>
+                        <div class="api-key-item">
+                            <div class="key-info">
+                                <h4>Google Search Console</h4>
+                                <span class="key-status connected">Bağlı</span>
+                            </div>
+                            <button class="key-action">
+                                <i data-lucide="edit"></i>
+                            </button>
+                        </div>
+                        <div class="api-key-item">
+                            <div class="key-info">
+                                <h4>Semrush API</h4>
+                                <span class="key-status disconnected">Bağlı değil</span>
+                            </div>
+                            <button class="key-action">
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Card -->
+                <div class="settings-section glassmorphic">
+                    <h3 class="section-title">
+                        <i data-lucide="bell"></i>
+                        Bildirimler
+                    </h3>
+                    <div class="notification-settings">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Email Bildirimleri</h4>
+                                <p>Haftalık SEO raporu</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <label for="emailNotifications" class="switch-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Push Bildirimler</h4>
+                                <p>Anlık SEO uyarıları</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="pushNotifications" checked>
+                                <label for="pushNotifications" class="switch-label"></label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>AI Insights</h4>
+                                <p>Yeni fırsat keşifleri</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="aiInsights" checked>
+                                <label for="aiInsights" class="switch-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences Card -->
+                <div class="settings-section glassmorphic">
+                    <h3 class="section-title">
+                        <i data-lucide="settings"></i>
+                        Tercihler
+                    </h3>
+                    <div class="preferences">
+                        <div class="preference-item">
+                            <span>Tema</span>
+                            <div class="theme-toggle">
+                                <button class="theme-btn active" data-theme="dark">
+                                    <i data-lucide="moon"></i>
+                                </button>
+                                <button class="theme-btn" data-theme="light">
+                                    <i data-lucide="sun"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="preference-item">
+                            <span>Dil</span>
+                            <select class="language-select">
+                                <option value="tr">Türkçe</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                        <div class="preference-item">
+                            <span>Tarih Formatı</span>
+                            <select class="date-format-select">
+                                <option value="dd/mm/yyyy">DD/MM/YYYY</option>
+                                <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="settings-section glassmorphic">
+                    <h3 class="section-title">
+                        <i data-lucide="credit-card"></i>
+                        Ödeme Yöntemi
+                    </h3>
+                    <div class="payment-methods">
+                        <div class="payment-card">
+                            <div class="card-info">
+                                <div class="card-brand">VISA</div>
+                                <div class="card-number">•••• •••• •••• 4532</div>
+                                <div class="card-expiry">12/26</div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="card-action-btn">
+                                    <i data-lucide="edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="add-payment-btn">
+                            <i data-lucide="plus"></i>
+                            <span>Yeni Kart Ekle</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <div class="logout-section">
+                <button class="logout-btn">
+                    <i data-lucide="log-out"></i>
+                    <span>Çıkış Yap</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav glassmorphic">
+            <div class="nav-item active" data-screen="dashboard">
+                <i data-lucide="home"></i>
+                <span>Ana Sayfa</span>
+            </div>
+            <div class="nav-item" data-screen="projects">
+                <i data-lucide="folder"></i>
+                <span>Projeler</span>
+            </div>
+            <div class="nav-item" data-screen="chat">
+                <i data-lucide="message-circle"></i>
+                <span>AI Chat</span>
+            </div>
+            <div class="nav-item" data-screen="automations">
+                <i data-lucide="zap"></i>
+                <span>Otomasyon</span>
+            </div>
+            <div class="nav-item" data-screen="profile">
+                <i data-lucide="user"></i>
+                <span>Profil</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/charts.js"></script>
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
