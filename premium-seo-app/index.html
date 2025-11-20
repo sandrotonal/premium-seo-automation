@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="styles/components.css">
     <link rel="stylesheet" href="styles/animations.css">
     <link rel="stylesheet" href="styles/responsive.css">
+    <link rel="stylesheet" href="styles/api-modal.css">
     
     <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -260,11 +261,20 @@
                 <div class="chat-title">
                     <i data-lucide="bot"></i>
                     <span>AI SEO Asistanı</span>
+                    <div class="connection-indicator">
+                        <div class="connection-dot disconnected" id="chatConnectionDot"></div>
+                        <span id="chatConnectionStatus">Bağlantı Yok</span>
+                    </div>
                 </div>
-                <button class="ai-tools-btn" id="aiToolsToggle">
-                    <i data-lucide="wrench"></i>
-                    <span>AI Araçları</span>
-                </button>
+                <div class="chat-header-actions">
+                    <button class="ai-tools-btn" id="aiToolsToggle">
+                        <i data-lucide="wrench"></i>
+                        <span>AI Araçları</span>
+                    </button>
+                    <button class="api-config-btn" id="openApiModal" title="API Ayarları">
+                        <i data-lucide="key"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -972,12 +982,78 @@
                 <span>Profil</span>
             </div>
         </div>
+
+        <!-- API Key Modal -->
+        <div class="api-modal-overlay" id="apiModal">
+            <div class="api-modal">
+                <div class="api-modal-header">
+                    <div class="api-modal-title">
+                        <i data-lucide="key"></i>
+                        <span>OpenAI API Anahtarı</span>
+                        <div class="connection-indicator">
+                            <div class="connection-dot disconnected" id="connectionDot"></div>
+                            <span id="connectionStatus">Bağlantı Yok</span>
+                        </div>
+                    </div>
+                    <button class="api-modal-close" id="closeApiModal">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                
+                <div class="api-modal-content">
+                    <div class="api-instructions">
+                        <h3>API Anahtarı Nasıl Alınır?</h3>
+                        <ol>
+                            <li><strong>OpenAI Hesabı:</strong> <a href="https://platform.openai.com/" target="_blank">platform.openai.com</a> adresine gidin</li>
+                            <li><strong>API Keys:</strong> Sol menüden "API Keys" bölümüne tıklayın</li>
+                            <li><strong>Create Key:</strong> "Create new secret key" butonuna tıklayın</li>
+                            <li><strong>Kopyala:</strong> Oluşturulan API anahtarını kopyalayın</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="api-steps">
+                        <h4>💡 İpucu</h4>
+                        <p>API anahtarınız güvenli bir şekilde tarayıcınızda saklanır ve sunucularımıza gönderilmez.</p>
+                        <p>GPT-3.5-turbo modeli kullanılarak SEO konularında uzmanlaşmış yanıtlar alırsınız.</p>
+                    </div>
+                    
+                    <div class="api-form">
+                        <div class="form-group">
+                            <label class="form-label" for="apiKeyInput">API Anahtarı</label>
+                            <div class="password-toggle">
+                                <input type="password" class="form-input" id="apiKeyInput" placeholder="sk-...">
+                                <button type="button" class="password-toggle-btn" id="togglePassword">
+                                    <i data-lucide="eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="api-status" id="apiStatus" style="display: none;">
+                            <i data-lucide="check-circle"></i>
+                            <span id="statusMessage"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="api-modal-footer">
+                    <button class="btn btn-secondary" id="testConnection">
+                        <i data-lucide="test-tube"></i>
+                        <span>Bağlantı Testi</span>
+                    </button>
+                    <button class="btn btn-primary" id="saveApiKey">
+                        <i data-lucide="save"></i>
+                        <span>Kaydet ve Bağlan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
     <script src="scripts/utils.js"></script>
     <script src="scripts/charts.js"></script>
     <script src="scripts/animations.js"></script>
+    <script src="scripts/api.js"></script>
     <script src="scripts/app.js"></script>
 </body>
 </html>

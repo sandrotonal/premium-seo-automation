@@ -192,6 +192,242 @@ class SEOSuiteApp {
         on(document, 'visibilitychange', () => {
             this.handleVisibilityChange();
         });
+
+        // API Modal functionality
+        this.setupAPIModalEvents();
+    }
+
+    setupAPIModalEvents() {
+        // API Modal elements
+        const apiModal = $('#apiModal');
+        const openApiModalBtn = $('#openApiModal');
+        const closeApiModalBtn = $('#closeApiModal');
+        const apiKeyInput = $('#apiKeyInput');
+        const saveApiKeyBtn = $('#saveApiKey');
+        const testConnectionBtn = $('#testConnection');
+        const togglePasswordBtn = $('#togglePassword');
+
+        // Open API modal
+        if (openApiModalBtn) {
+            on(openApiModalBtn, 'click', () => {
+                this.openAPIModal();
+            });
+        }
+
+        // Close API modal
+        if (closeApiModalBtn) {
+            on(closeApiModalBtn, 'click', () => {
+                this.closeAPIModal();
+            });
+        }
+
+        // Click outside to close
+        if (apiModal) {
+            on(apiModal, 'click', (e) => {
+                if (e.target === apiModal) {
+                    this.closeAPIModal();
+                }
+            });
+        }
+
+        // Save API key
+        if (saveApiKeyBtn) {
+            on(saveApiKeyBtn, 'click', () => {
+                this.saveApiKey();
+            });
+        }
+
+        // Test connection
+        if (testConnectionBtn) {
+            on(testConnectionBtn, 'click', () => {
+                this.testApiConnection();
+            });
+        }
+
+        // Toggle password visibility
+        if (togglePasswordBtn && apiKeyInput) {
+            on(togglePasswordBtn, 'click', () => {
+                const isPassword = apiKeyInput.type === 'password';
+                apiKeyInput.type = isPassword ? 'text' : 'password';
+                
+                const icon = togglePasswordBtn.querySelector('i');
+                if (icon) {
+                    icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }
+            });
+        }
+
+        // Enter key in API key input
+        if (apiKeyInput) {
+            on(apiKeyInput, 'keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.saveApiKey();
+                }
+            });
+        }
+
+        // Update connection status on page load
+        this.updateConnectionStatus();
+    }
+
+    openAPIModal() {
+        const apiModal = $('#apiModal');
+        const apiKeyInput = $('#apiKeyInput');
+        
+        if (apiModal) {
+            addClass(apiModal, 'active');
+        }
+
+        // Focus on input
+        if (apiKeyInput) {
+            apiKeyInput.focus();
+            // Load existing API key
+            const existingKey = window.aiAPI.getApiKey();
+            if (existingKey) {
+                apiKeyInput.value = existingKey;
+            }
+        }
+
+        // Initialize icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    closeAPIModal() {
+        const apiModal = $('#apiModal');
+        if (apiModal) {
+            removeClass(apiModal, 'active');
+        }
+    }
+
+    async saveApiKey() {
+        const apiKeyInput = $('#apiKeyInput');
+        const saveBtn = $('#saveApiKey');
+        const statusDiv = $('#apiStatus');
+        const statusMessage = $('#statusMessage');
+
+        if (!apiKeyInput || !saveBtn) return;
+
+        const apiKey = apiKeyInput.value.trim();
+        
+        if (!apiKey) {
+            this.showApiStatus('Lütfen geçerli bir API anahtarı girin', 'error');
+            return;
+        }
+
+        // Show loading state
+        saveBtn.classList.add('btn-loading');
+        saveBtn.disabled = true;
+
+        try {
+            // Save API key
+            window.aiAPI.setApiKey(apiKey);
+            
+            // Test the connection
+            const testResult = await window.aiAPI.testConnection();
+            
+            if (testResult.success) {
+                this.showApiStatus('API anahtarı başarıyla kaydedildi ve bağlantı testi başarılı!', 'success');
+                this.updateConnectionStatus();
+                
+                // Close modal after 2 seconds
+                setTimeout(() => {
+                    this.closeAPIModal();
+                    showNotification('AI asistanı aktif! Artık dinamik yanıtlar alacaksınız.', 'success');
+                }, 2000);
+            } else {
+                this.showApiStatus(`Bağlantı hatası: ${testResult.message}`, 'error');
+                window.aiAPI.removeApiKey(); // Remove invalid key
+            }
+        } catch (error) {
+            this.showApiStatus(`Hata: ${error.message}`, 'error');
+            window.aiAPI.removeApiKey();
+        } finally {
+            // Remove loading state
+            saveBtn.classList.remove('btn-loading');
+            saveBtn.disabled = false;
+        }
+    }
+
+    async testApiConnection() {
+        const testBtn = $('#testConnection');
+        const apiKeyInput = $('#apiKeyInput');
+        const statusDiv = $('#apiStatus');
+
+        if (!testBtn || !apiKeyInput) return;
+
+        const apiKey = apiKeyInput.value.trim();
+        
+        if (!apiKey) {
+            this.showApiStatus('Test etmek için önce API anahtarı girin', 'warning');
+            return;
+        }
+
+        // Show loading state
+        testBtn.classList.add('btn-loading');
+        testBtn.disabled = true;
+
+        try {
+            // Temporarily set the API key for testing
+            const originalKey = window.aiAPI.getApiKey();
+            window.aiAPI.setApiKey(apiKey);
+
+            // Test connection
+            const testResult = await window.aiAPI.testConnection();
+            
+            if (testResult.success) {
+                this.showApiStatus('Bağlantı başarılı! API çalışıyor.', 'success');
+            } else {
+                this.showApiStatus(`Bağlantı hatası: ${testResult.message}`, 'error');
+            }
+
+            // Restore original key
+            window.aiAPI.setApiKey(originalKey);
+            
+        } catch (error) {
+            this.showApiStatus(`Test hatası: ${error.message}`, 'error');
+        } finally {
+            // Remove loading state
+            testBtn.classList.remove('btn-loading');
+            testBtn.disabled = false;
+        }
+    }
+
+    showApiStatus(message, type) {
+        const statusDiv = $('#apiStatus');
+        const statusMessage = $('#statusMessage');
+
+        if (!statusDiv || !statusMessage) return;
+
+        statusMessage.textContent = message;
+        statusDiv.className = `api-status ${type}`;
+        statusDiv.style.display = 'flex';
+
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+            statusDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    updateConnectionStatus() {
+        const connectionDot = $('#connectionDot');
+        const connectionStatus = $('#connectionStatus');
+
+        if (!connectionDot || !connectionStatus) return;
+
+        const isConnected = window.aiAPI.isApiConfigured();
+
+        if (isConnected) {
+            connectionDot.className = 'connection-dot connected';
+            connectionStatus.textContent = 'Bağlı';
+        } else {
+            connectionDot.className = 'connection-dot disconnected';
+            connectionStatus.textContent = 'Bağlantı Yok';
+        }
     }
 
     initializeNavigation() {
@@ -317,6 +553,30 @@ class SEOSuiteApp {
         if (chatInput) {
             chatInput.focus();
         }
+
+        // Update connection status for chat
+        this.updateChatConnectionStatus();
+    }
+
+    updateChatConnectionStatus() {
+        const chatConnectionDot = $('#chatConnectionDot');
+        const chatConnectionStatus = $('#chatConnectionStatus');
+
+        if (!chatConnectionDot || !chatConnectionStatus) return;
+
+        const isConnected = window.aiAPI.isApiConfigured();
+
+        if (isConnected) {
+            chatConnectionDot.className = 'connection-dot connected';
+            chatConnectionStatus.textContent = 'Aktif';
+            chatConnectionStatus.style.display = 'inline';
+            chatConnectionDot.style.display = 'inline-block';
+        } else {
+            chatConnectionDot.className = 'connection-dot disconnected';
+            chatConnectionStatus.textContent = 'API Gerekli';
+            chatConnectionStatus.style.display = 'inline';
+            chatConnectionDot.style.display = 'inline-block';
+        }
     }
 
     async initializeAutomations() {
@@ -355,7 +615,7 @@ class SEOSuiteApp {
     }
 
     // Chat functionality
-    sendMessage() {
+    async sendMessage() {
         const chatInput = $('#chatInput');
         const chatMessages = $('#chatMessages');
         
@@ -368,14 +628,8 @@ class SEOSuiteApp {
         this.addChatMessage(message, 'user');
         chatInput.value = '';
 
-        // Show typing indicator
-        this.showTypingIndicator();
-
-        // Simulate AI response
-        setTimeout(() => {
-            this.hideTypingIndicator();
-            this.generateAIResponse(message);
-        }, 1000 + Math.random() * 2000);
+        // Generate AI response
+        await this.generateAIResponse(message);
     }
 
     addChatMessage(content, sender) {
@@ -446,26 +700,30 @@ class SEOSuiteApp {
         }
     }
 
-    generateAIResponse(userMessage) {
-        const responses = {
-            'anahtar kelime': 'Mükemmel! Türkiye teknoloji sektörü için anahtar kelime araştırması yaptım. İşte sonuçlar:',
-            'seo': 'SEO optimizasyonu için öncelikle teknik altyapınızı kontrol edelim. Sayfa hızı, mobil uyumluluk ve yapılandırılmış veri önemli faktörler.',
-            'rakipler': 'Rakip analizi yaparak güçlü ve zayıf yönlerinizi tespit edebilirim. Hangi sektörde faaliyet gösteriyorsunuz?',
-            'rapor': 'SEO raporunuz hazır! Detaylı analiz için projenizi seçin veya yeni bir analiz başlatın.',
-            'varsayılan': 'Merhaba! SEO asistanınızım. Size nasıl yardımcı olabilirim? Anahtar kelime araştırması, rakip analizi veya SEO optimizasyonu konularında destek verebilirim.'
-        };
-
-        let response = responses.varsayılan;
-        const messageLower = userMessage.toLowerCase();
-
-        for (const [key, value] of Object.entries(responses)) {
-            if (messageLower.includes(key)) {
-                response = value;
-                break;
-            }
+    async generateAIResponse(userMessage) {
+        try {
+            // Show typing indicator
+            this.showTypingIndicator();
+            
+            // Get AI response using the API service
+            const response = await window.aiAPI.getResponse(userMessage);
+            
+            // Hide typing indicator
+            this.hideTypingIndicator();
+            
+            // Add AI response to chat
+            this.addChatMessage(response, 'ai');
+            
+        } catch (error) {
+            console.error('AI Response Error:', error);
+            this.hideTypingIndicator();
+            
+            // Fallback response in case of error
+            const fallbackResponse = 'Üzgünüm, şu anda yanıt veremiyorum. Lütfen daha sonra tekrar deneyin veya internet bağlantınızı kontrol edin.';
+            this.addChatMessage(fallbackResponse, 'ai');
+            
+            showNotification('AI yanıt hatası oluştu', 'error');
         }
-
-        this.addChatMessage(response, 'ai');
     }
 
     activateVoiceInput() {

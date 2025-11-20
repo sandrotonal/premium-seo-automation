@@ -45,6 +45,61 @@
     color: var(--accent-400);
 }
 
+/* Chat Header Actions Container */
+.chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* API Config Button */
+.api-config-btn {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.api-config-btn:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-500);
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.api-config-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.api-config-btn.active {
+    color: var(--primary-500);
+    border-color: var(--primary-500);
+}
+
+/* Connection Indicator in Chat */
+#chatConnectionDot,
+#chatConnectionStatus {
+    display: none;
+}
+
+.chat-title .connection-indicator {
+    margin-left: var(--space-sm);
+}
+
+.chat-title .connection-dot {
+    width: 6px;
+    height: 6px;
+}
+
 .chat-messages {
     flex: 1;
     padding: var(--space-md);
