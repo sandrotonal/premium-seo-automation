@@ -28,16 +28,19 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
+      - name: Copy files to site directory
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          cp -r scripts _site/
+          cp -r styles _site/
+          cp .nojekyll _site/ 2>/dev/null || true
+          cp _redirects _site/ 2>/dev/null || true
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./
+          path: _site/
 
   # Deployment job
   deploy:
