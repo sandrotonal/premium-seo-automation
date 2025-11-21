@@ -1,0 +1,16 @@
+# SPA Routing - Netlify
+/*    /index.html   200
+
+# Security headers
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Compression
+/* 
+  Cache-Control: public, max-age=31536000
+
+# API Routes (if any)
+# /api/* /.netlify/functions/:splat 200
