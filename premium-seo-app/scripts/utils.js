@@ -668,4 +668,23 @@ window.smoothScrollTo = smoothScrollTo;
 window.setTheme = setTheme;
 window.getTheme = getTheme;
 window.toggleTheme = toggleTheme;
+
+// Global payment modal functions
+window.showPaymentModal = function() {
+    if (window.seoApp) {
+        window.seoApp.showPaymentModal();
+    }
+};
+
+window.closePaymentModal = function() {
+    if (window.seoApp) {
+        window.seoApp.closePaymentModal();
+    }
+};
+
+window.selectPlan = function(plan) {
+    if (window.seoApp) {
+        window.seoApp.selectPlan(plan);
+    }
+};
 window.handleError = handleError;

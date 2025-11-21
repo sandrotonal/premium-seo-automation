@@ -804,7 +804,7 @@
                                 <span>Otomatik raporlama</span>
                             </div>
                         </div>
-                        <button class="upgrade-btn primary-btn">
+                        <button class="upgrade-btn primary-btn" onclick="showPaymentModal()">
                             <i data-lucide="arrow-up"></i>
                             <span>Planı Yükselt</span>
                         </button>
@@ -1044,6 +1044,110 @@
                         <i data-lucide="save"></i>
                         <span>Kaydet ve Bağlan</span>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content payment-modal glassmorphic">
+            <div class="modal-header">
+                <h2>Plan Seçin</h2>
+                <button class="modal-close" onclick="closePaymentModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="pricing-grid">
+                    <!-- Free Plan -->
+                    <div class="pricing-card basic">
+                        <div class="plan-header">
+                            <h3>Başlangıç</h3>
+                            <div class="price">
+                                <span class="amount">Ücretsiz</span>
+                            </div>
+                        </div>
+                        <ul class="features-list">
+                            <li><i data-lucide="check"></i> 3 proje</li>
+                            <li><i data-lucide="check"></i> Temel SEO analizi</li>
+                            <li><i data-lucide="check"></i> Aylık raporlar</li>
+                            <li><i data-lucide="x"></i> AI asistan</li>
+                            <li><i data-lucide="x"></i> Otomatik optimizasyon</li>
+                        </ul>
+                        <button class="plan-btn" onclick="selectPlan('free')">Mevcut Plan</button>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div class="pricing-card featured">
+                        <div class="popular-badge">En Popüler</div>
+                        <div class="plan-header">
+                            <h3>Pro</h3>
+                            <div class="price">
+                                <span class="amount">₺299</span>
+                                <span class="period">/ay</span>
+                            </div>
+                        </div>
+                        <ul class="features-list">
+                            <li><i data-lucide="check"></i> Sınırsız proje</li>
+                            <li><i data-lucide="check"></i> AI destekli analiz</li>
+                            <li><i data-lucide="check"></i> Otomatik raporlama</li>
+                            <li><i data-lucide="check"></i> AI asistan</li>
+                            <li><i data-lucide="check"></i> Rakip takibi</li>
+                            <li><i data-lucide="check"></i> Teknik SEO audit</li>
+                        </ul>
+                        <button class="plan-btn primary" onclick="selectPlan('pro')">Pro Plan Seç</button>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="pricing-card enterprise">
+                        <div class="plan-header">
+                            <h3>Enterprise</h3>
+                            <div class="price">
+                                <span class="amount">₺599</span>
+                                <span class="period">/ay</span>
+                            </div>
+                        </div>
+                        <ul class="features-list">
+                            <li><i data-lucide="check"></i> Pro planının tüm özellikleri</li>
+                            <li><i data-lucide="check"></i> API entegrasyonu</li>
+                            <li><i data-lucide="check"></i> Özel raporlar</li>
+                            <li><i data-lucide="check"></i> Öncelikli destek</li>
+                            <li><i data-lucide="check"></i> Beyaz etiket çözümü</li>
+                            <li><i data-lucide="check"></i> Özel onboarding</li>
+                        </ul>
+                        <button class="plan-btn enterprise-btn" onclick="selectPlan('enterprise')">İletişime Geç</button>
+                    </div>
+                </div>
+
+                <!-- Payment Form (Hidden by default) -->
+                <div class="payment-form" id="paymentForm" style="display: none;">
+                    <h3>Kart Bilgileri</h3>
+                    <form id="stripePaymentForm">
+                        <div class="form-group">
+                            <label>Kart Numarası</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Son Kullanma</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" id="cardCvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Kart Sahibi</label>
+                            <input type="text" id="cardName" placeholder="Ad Soyad">
+                        </div>
+                        <button type="submit" class="payment-submit-btn">
+                            <i data-lucide="credit-card"></i>
+                            <span id="paymentBtnText">Ödemeyi Tamamla</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
